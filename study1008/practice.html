@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<ul>
+			<li>孩子多个1</li>
+			<li>孩子多个2</li>
+			<li>孩子多个3</li>
+			<li>孩子多个4</li>
+			<li>孩子多个5</li>
+			<li>孩子多个6</li>
+			<li>孩子多个7</li>
+			<li>孩子多个8</li>
+		</ul>
+		<ol>
+			
+		</ol>
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript">
+//			$("li").bind("mouseenter",function(){
+//				$(this).css("background",'red').bind("mouseleave",function(){
+//					$(this).css("background","");
+//				});
+//			})
+//			$("li").on({
+//				click : function(){
+//					$(this).css("background","#FF0000")
+//				},
+//				mouseenter : function(){
+//					$(this).css("background","pink")
+//				},
+//				mouseleave : function(){
+//					$(this).css("background","")
+//				}
+//				
+//			})
+			$("ul").delegate("li","click",function(){
+				$(this).css("background","pink");
+			})
+			$.ajax({
+				type : "get",
+				url : "data.json",
+				async : true,
+				success : function(msg){
+					var str = "";
+					for (var i = 0;i < msg.list.length;i ++) {
+						var userinfo = msg.list[i];
+						str += `<li>用户名:${userinfo.username}  密码:${userinfo.uesrpwd}</li>`;
+					}
+					$("ol").html(str)
+				}
+			})
+			//使用委托实现为动态创建的元素添加事件
+			$("ol").on("mouseenter","li",function(){
+				$(this).css("background","pink");
+			}).delegate("li","mouseleave",function(){
+				$(this).css("background","");
+			})
+		</script>
+	</body>
+</html>

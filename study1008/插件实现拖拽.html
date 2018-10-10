@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 100px;
+			height: 100px;
+			background: saddlebrown;
+			position: absolute;
+			cursor: move;
+		}
+	</style>
+	</head>
+	<body>
+		<div id="box">77777</div>
+	</body>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript">
+		$.fn.extend({
+			down : function(){
+				this.on("mousedown",function(e){
+					var e = e || event;
+					this.disx = e.pageX - this.offset().left;
+					this.disy = e.pageY - this.offset().top;
+					this.move();
+					this.up();
+					return false;
+				}.bind(this))
+			},
+			move : function(){
+				$(document).on("mousemove",function(e){
+					var e = e || event;
+					this.css({
+						left : e.pageX - this.disx,
+						top : e.pageY - this.disy
+					})
+				}.bind(this))
+			},
+			up : function(){
+				$(document).on("mouseup",function(){
+					$(document).off("mousemove");
+				})
+			}
+		})
+		$("#box").down();
+	</script>
+</html>

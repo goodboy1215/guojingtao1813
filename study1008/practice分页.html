@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="main.css" />
+		<style>
+			.header{
+				height: 40px;
+				width: 900px;
+				margin: 0 auto 50px;
+			}
+			#box{
+				width: 300px;
+				height: 30px;
+				border: 1px solid black;
+				float: left;
+				margin-left:500px;
+			}
+			#box li{
+				float: left;
+				list-style: none;
+				display: inline-block;
+				padding: 0 5px;
+			}
+			#box li.active{
+				color: red;
+			}
+			#box ul{
+				/*float: left;*/
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		<ul class="shoplist clearfix" id="main">
+			<!--<li>
+				<img src="img/1.jpg" alt="" />
+				<p>小米1</p>
+				<p>999</p>
+				<button>购买</button>
+			</li>-->
+		</ul>	
+		<div class="M-box4" style="margin-left: 300px;"></div>
+		<script src="script/lib/jquery.min.js"></script>
+		<script src="script/jquery.pagination.js"></script>
+		<script type="text/javascript">
+			var index = 1;
+			var pageNum = 4;
+			$.ajax({
+				type : "get",
+				url : "data.json",
+				async : true,
+				success : function(arr){
+//					showData(arr,index);
+					//计算总页数
+					var pageTotal = Math.ceil(arr.length / pageNum);
+					//分页插件
+					$(".M-box4").pagination({
+						pageCount : pageTotal,
+						keepShowPN : true,
+						callback : function(api){
+							//获取点击的控件页码
+							index = api.getCurrent();
+							//点击分页控件时，使用ajax获取服务器的数据
+							$.getJSON("data.json",function(arr){
+								showData(arr,index);
+							})
+						}
+					})
+				}
+			})
+			function showData(arr,index){
+				var conStr = "";
+				for( var i = (index-1)*pageNum ; i < index*pageNum ; i++ ){
+					var pro = arr[i];
+					if( i < arr.length ){//解决最后一页bug（下标越界）
+						conStr += `<li>
+										<img src="img/${pro.src}" alt="" />
+										<p>${ pro.name }</p>
+										<p>${ pro.price }</p>
+										<button>购买</button>
+									</li>`;
+					}
+				}
+				$("#main").html( conStr );
+			}
+		</script>
+	</body>
+</html>
